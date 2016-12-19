@@ -1,27 +1,34 @@
+#ilovetacos
 import random
 
+#create deck variables
 masterDeck = []
 deck1 = []
 deck2 = []
 
+#initialize face card dictionaries
 faceCardDict = {
 	11 : "J",
 	12 : "Q",
 	13 : "K",
 	14 : "A"
 }
+
+#METHODS
 def main():
 	#initialize master Deck
+	#use try-except to make sure there are less than 53 cards in play
 	try:
 		numCards = input("How many cards would you like to play with?\n")
 		print(numCards)
 		fillMasterDeck(numCards)
 	except IndexError:
-		print("Please enter a number under 52")
+		print("Please enter a number under 53")
 
 	#initialize player decks
 	deal()
-	play()
+	# play()
+	recursive_play(1)
 	winner()
 	
 def fillMasterDeck(numCards):
@@ -50,6 +57,24 @@ def deal():
 			deck2.append(popCard);
 			turndicator = not turndicator
 
+def recursive_play(turn_counter):
+	print "Turn %i" % turn_counter
+	if(len(deck1) == 0 or len(deck2) == 0):
+		pass;
+	else:
+		print "Player 1 has %i cards" % len(deck1)
+		print "Player 2 has %i cards" % len(deck2)
+		card1 = deck1.pop(0)
+		printDrawnCard("Player 1", card1)
+		card2 = deck2.pop(0)
+		printDrawnCard("Player 2", card2)
+		if(card1 > card2 or card2 > card1):
+			battle(card1, card2, False)
+		elif(card1 == card2):
+			war()
+		turn_counter += 1
+		recursive_play(turn_counter)
+
 def play():
 	turn_counter = 0
 	while(len(deck1) > 0 and len(deck2) > 0):
@@ -70,6 +95,8 @@ def play():
 
 def war():
 	print "WAR!"
+	print len(deck1)
+	print len(deck2)
 	print "Player 1 has %i cards" % len(deck1)
 	print "Player 2 has %i cards" % len(deck2)
 	#Formatting for card
@@ -79,7 +106,7 @@ def war():
 	card2 = deck2.pop(0)
 	printDrawnCard("Player 2", card2)
 	if(card1 > card2 or card2 > card1):
-		battle()
+		battle(card1, card2, True)
 	elif(card1 == card2):
 		war()
 
@@ -88,6 +115,7 @@ def battle(card1, card2, isWar):
 		deck1.append(card1)
 		deck1.append(card2)
 		print "Player 1 gained a %i and a %i" % (card1, card2)
+		print "Player 1 has %i cards" % len(deck1)
 		try:
 			warSpoils(isWar, True)
 		except IndexError:

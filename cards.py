@@ -1,4 +1,5 @@
 #ilovetacos
+#by @fatcat2
 import random
 
 #create deck variables
@@ -42,8 +43,7 @@ def fillMasterDeck(numCards):
 	for x in range(0, numCards):
 		masterDeck.append(pool.pop(random.randint(0, len(pool))))
 	print("Master Deck Cards:")
-	for card in masterDeck:
-		print(card)
+	print masterDeck
 
 def deal():
 	turndicator = True
@@ -73,6 +73,9 @@ def recursive_play(turn_counter):
 		elif(card1 == card2):
 			war()
 		turn_counter += 1
+		print("\n")
+		next = input("press enter to proceed")
+		print next
 		recursive_play(turn_counter)
 
 def play():
@@ -116,6 +119,7 @@ def battle(card1, card2, isWar):
 		deck1.append(card2)
 		print "Player 1 gained a %i and a %i" % (card1, card2)
 		print "Player 1 has %i cards" % len(deck1)
+		print "Player 2 has %i cards" % len(deck2)
 		try:
 			warSpoils(isWar, True)
 		except IndexError:
@@ -123,6 +127,9 @@ def battle(card1, card2, isWar):
 	elif(card1 < card2):
 		deck2.append(card1)
 		deck2.append(card2)
+		print "Player 2 gained a %i and a %i" % (card1, card2)
+		print "Player 1 has %i cards" % len(deck1)
+		print "Player 2 has %i cards" % len(deck2)
 		try:
 			warSpoils(isWar, True)
 		except IndexError:
@@ -147,9 +154,9 @@ def printDrawnCard(playerName, card):
 		print "%s drew a %i" % (playerName, card)
 
 def warSpoils(iswar, deck1win):
-	if(deck1win):
+	if(deck1win and iswar):
 		deck1.append(deck2.pop(0))
-	else:
+	elif(not deck1win and iswar):
 		deck2.append(deck1.pop(0))
 
 

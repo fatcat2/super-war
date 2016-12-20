@@ -90,49 +90,41 @@ def play(turn_counter):
 
 def war(card1, card2):
 	warSpoilsList.extend([card1, card2])
-	card1Win = True
-	emptyOtherDeck = False
 	if(len(deck1) == 0 or len(deck2) == 0):
-		emptyOtherDeck = True
-		if(len(deck1) == 0):
-			card1Win = False
-			pass
-		elif(len(deck2) == 0):
-			card1Win = True
-			pass
+		pass
 	else:
 		card1 = deck1.pop(0)
 		card2 = deck2.pop(0)
 		if(card1 > card2 or card2 > card1):
-			card1Win = battle(card1, card2, True)
+			battle(card1, card2, True)
 		elif(card1 == card2):
 			war(card1, card2)
-	warSpoils(card1Win, emptyOtherDeck)
 
 def battle(card1, card2, isWar):
 	if(card1 > card2):
 		deck1.append(card1)
 		deck1.append(card2)
-		return True
+		if(not isWar):
+			pass
+		else:
+			warSpoils(True)
 	elif(card1 < card2):
 		deck2.append(card1)
 		deck2.append(card2)
-		return False
+		if(not isWar):
+			pass
+		else:
+			warSpoils(False)
 
-def warSpoils(deck1win, emptyOtherDeck):
+def warSpoils(deck1win):
 	if(deck1win):
-		if(not emptyOtherDeck and len(deck2) != 0):
+		if(len(deck2) != 0):
 			warSpoilsList.append(deck2.pop(0))
-		else:
-			emptyOtherDeck = True
 		deck1.extend(warSpoilsList)
-	elif(not deck1win):
-		if(not emptyOtherDeck) and len(deck1) != 0:
+	else:
+		if(len(deck1) != 0):
 			warSpoilsList.append(deck1.pop(0))
-		else:
-			emptyOtherDeck = True
 		deck2.extend(warSpoilsList)
-	deck1win = False
 	del warSpoilsList[:]
 
 def excelStats():

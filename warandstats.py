@@ -33,19 +33,19 @@ def main():
 		fillMasterDeck(numCards)
 	except IndexError:
 		print("Please enter a number under 53")
-
 	deal()
-	recursive_play(1)
+	print("COLLECTING DATA")
+	play(1)
 	winner()
+	raw_input("DATA COLLECTION COMPLETE\nPRESS ENTER TO INITIATE DATA ANALYSIS")
 	plotThisShit()
 	
 def fillMasterDeck(numCards):
 	#Thanks to /u/SmartAsFart for these optimizations!
+	global masterDeck
 	pool = [x for x in range(2, 15)]*4
 	for x in range(0, numCards):
 		masterDeck += [pool.pop(random.randrange(0, len(pool))) for i in range(numCards)]
-	print("Master Deck Cards:")
-	print masterDeck
 
 def deal():
 	turndicator = True
@@ -59,102 +59,66 @@ def deal():
 			deck2.append(popCard);
 			turndicator = not turndicator
 
-def recursive_play(turn_counter):
+def play(turn_counter):
 	deck1Len = len(deck1)
 	deck2Len = len(deck2)
 	deck1Stats.append(deck1Len)
 	deck2Stats.append(deck2Len)
 	numTurns.append(turn_counter)
-	print "--------------------------"
 	if(len(deck1) == 0 or len(deck2) == 0):
 		pass;
 	else:
-		print "Turn %i" % turn_counter
-		print "Player 1 has %i cards" % len(deck1)
-		print "Player 2 has %i cards" % len(deck2)
 		card1 = deck1.pop(0)
-		printDrawnCard("Player 1", card1)
 		card2 = deck2.pop(0)
-		printDrawnCard("Player 2", card2)
 		if(card1 > card2 or card2 > card1):
 			battle(card1, card2, False)
 		elif(card1 == card2):
 			war(card1, card2)
 		turn_counter += 1
-		print("\n")
-		# raw_input("press enter to proceed")
-		recursive_play(turn_counter)
+		play(turn_counter)
 
 def war(card1, card2):
 	warSpoilsList.extend([card1, card2])
-	card1Win = True
 	if(len(deck1) == 0 or len(deck2) == 0):
-		if(len(deck1) == 0):
-			print "Player 1 has no cards left"
-			pass
-		elif(len(deck2) == 0):
-			print "Player 2 has no cards left"
-			pass
+		pass
 	else:
-		print "WAR!"
 		card1 = deck1.pop(0)
-		printDrawnCard("Player 1", card1)
 		card2 = deck2.pop(0)
-		printDrawnCard("Player 2", card2)
 		if(card1 > card2 or card2 > card1):
-			card1Win = battle(card1, card2, True)
+			battle(card1, card2, True)
 		elif(card1 == card2):
 			war(card1, card2)
-	warSpoils(card1Win)
 
 def battle(card1, card2, isWar):
 	if(card1 > card2):
 		deck1.append(card1)
 		deck1.append(card2)
-		print "Player 1 gained a %i and a %i" % (card1, card2)
-		print ""
 		if(not isWar):
-			print "Player 1 has %i cards" % len(deck1)
-			print "Player 2 has %i cards" % len(deck2)
-		return True
+			pass
+		else:
+			warSpoils(True)
 	elif(card1 < card2):
 		deck2.append(card1)
 		deck2.append(card2)
-		print "Player 2 gained a %i and a %i" % (card1, card2)
-		print ""
 		if(not isWar):
-			print "Player 1 has %i cards" % len(deck1)
-			print "Player 2 has %i cards" % len(deck2)
-		return False
+			pass
+		else:
+			warSpoils(False)
 
 def winner():
-	print "Player 1 has %i cards" % len(deck1)
-	print "Player 2 has %i cards" % len(deck2)
 	if(len(deck1) == 0):
-		print "Player 2 Wins!!!"
+		print("Player 2 Wins!!!")
 	else:
-		print 'Player 1 Wins!!!'
-
-def printDrawnCard(playerName, card):
-	if(card > 10):
-		print "%s drew a %s" % (playerName, faceCardDict[card])
-	else:
-		print "%s drew a %i" % (playerName, card)
+		print('Player 1 Wins!!!')
 
 def warSpoils(deck1win):
 	if(deck1win):
-		print "Player 1 wins the war"
 		warSpoilsList.append(deck2.pop(0))
 		deck1.extend(warSpoilsList)
 	elif(not deck1win):
-		print "Player 2 wins the war"
 		warSpoilsList.append(deck1.pop(0))
 		deck2.extend(warSpoilsList)
-	print "Winner of war gets:"
-	print warSpoilsList
 	del warSpoilsList[:]
-	print "Player 1 has %i cards" % len(deck1)
-	print "Player 2 has %i cards" % len(deck2)
 
 def plotThisShit():
 	plt.xkcd()

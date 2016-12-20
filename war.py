@@ -78,17 +78,12 @@ def play(turn_counter):
 def war(card1, card2):
 	warSpoilsList.extend([card1, card2])
 	print("WAR!")
-	card1Win = True
-	emptyOtherDeck = False
 	if(len(deck1) == 0 or len(deck2) == 0):
-		emptyOtherDeck = True
 		if(len(deck1) == 0):
 			print("Player 1 has no cards left")
-			card1Win = False
 			pass
 		elif(len(deck2) == 0):
 			print("Player 2 has no cards left")
-			card1Win = True
 			pass
 	else:
 		card1 = deck1.pop(0)
@@ -96,7 +91,7 @@ def war(card1, card2):
 		card2 = deck2.pop(0)
 		printDrawnCard("Player 2", card2)
 		if(card1 > card2 or card2 > card1):
-			card1Win = battle(card1, card2, True)
+			battle(card1, card2, True)
 		elif(card1 == card2):
 			war(card1, card2)
 
@@ -111,7 +106,6 @@ def battle(card1, card2, isWar):
 			print("Player 2 has %i cards" % len(deck2))
 		else:
 			warSpoils(True)
-		return True
 	elif(card1 < card2):
 		deck2.append(card1)
 		deck2.append(card2)
@@ -122,7 +116,6 @@ def battle(card1, card2, isWar):
 			print("Player 2 has %i cards" % len(deck2))
 		else:
 			warSpoils(False)
-		return False
 
 def winner():
 	print( "Player 1 has %i cards" % len(deck1))
@@ -144,9 +137,9 @@ def warSpoils(deck1win):
 		if(len(deck2) != 0):
 			warSpoilsList.append(deck2.pop(0))
 		deck1.extend(warSpoilsList)
-	elif(len(deck1) != 0):
+	else:
 		print( "Player 2 wins the war")
-		if(not emptyOtherDeck):
+		if(len(deck1) != 0):
 			warSpoilsList.append(deck1.pop(0))
 		deck2.extend(warSpoilsList)
 	print("Spoils of War:")

@@ -37,27 +37,17 @@ def main():
 	global testNumTurns
 	#initialize master Deck
 	#use try-except to make sure there are less than 53 cards in play
-	try:
-		numCards = int(input("How many cards would you like to play with?\n"))
-		print("------------------------")
-	except IndexError:
-		print("Please enter a number under 53")
+	numCards = int(input("How many cards would you like to play with?\n"))
+	print("------------------------\nCollecting Data...")
 	while(len(bigListNumTurns) <= 10):
-		sadaf = int(len(bigListNumTurns))*10
-		print("Data Collection Process: %i%%" % sadaf)
 		fillMasterDeck(numCards)
 		deal()
-		recursive_play(1)
+		play(1)
 		if(len(numTurns) >= testNumTurns):
 			bigListDeck1.append(deck1Hand[:])
 			bigListDeck2.append(deck2Hand[:])
 			bigListNumTurns.append(len(numTurns))
-		del masterDeck[:]
-		del deck1[:]
-		del deck2[:]
-		del deck1Hand[:]
-		del deck2Hand[:]
-		del numTurns[:]
+		clearLists()
 	raw_input("Data collection complete.\nPress enter to inititate data analysis.")
 	lotsOfStats(testNumTurns)
 	plotThisShit(testNumTurns)
@@ -75,8 +65,8 @@ def fillMasterDeck(numCards):
 		masterDeck += [pool.pop(random.randrange(0, len(pool))) for i in range(numCards)]
 
 def deal():
-	turndicator = True
-	deckLen = len(masterDeck)
+	turndicator = True #indicates whether or not it is Player One's turn to take a card
+	deckLen = len(masterDeck) # have this stored as a variable since the masterDeck's length will change as cards get popped
 	for x in range(0, deckLen):
 		popCard = masterDeck.pop(random.randint(0, len(masterDeck)-1))
 		if(turndicator):
@@ -86,7 +76,7 @@ def deal():
 			deck2.append(popCard);
 			turndicator = not turndicator
 
-def recursive_play(turn_counter):
+def play(turn_counter):
 	numTurns.append(turn_counter)
 	deck1Hand.append(len(deck1))
 	deck2Hand.append(len(deck2))
@@ -100,7 +90,7 @@ def recursive_play(turn_counter):
 		elif(card1 == card2):
 			war(card1, card2)
 		turn_counter += 1
-		recursive_play(turn_counter)
+		play(turn_counter)
 
 def war(card1, card2):
 	warSpoilsList.extend([card1, card2])
@@ -182,4 +172,11 @@ def plotThisShit(testNumTurns):
 	plt.legend(handles=[red_patch, blue_patch])
 	plt.show()
 
+def clearLists():
+	del masterDeck[:]
+	del deck1[:]
+	del deck2[:]
+	del deck1Hand[:]
+	del deck2Hand[:]
+	del numTurns[:]
 if __name__ == "__main__": main()

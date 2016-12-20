@@ -3,7 +3,7 @@ Programming Tune-Up Project.
 
 Author: @fatcat2
 
-Contact: ryanjchen2@gmail.com
+Contact: ryanjengchen@gmail.com
 
 Twitter: @treestumpystump
 
@@ -12,3 +12,4 @@ Objective: Create a program that simulates the card  game "War" between two play
 Concepts Used:
  - Encapsulation of methods
  - Recursion
+ - Data Visualization

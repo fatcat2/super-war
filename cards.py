@@ -40,7 +40,6 @@ def fillMasterDeck(numCards):
 	# print("yes")
 	for x in range(0, numCards):
 		poolsize = len(pool)
-		print 1.0/poolsize
 		masterDeck.append(pool.pop(random.randint(0, poolsize)))
 		raw_input("Hello ladies. Press enter to proceed")
 	print("Master Deck Cards:")

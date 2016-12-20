@@ -3,10 +3,12 @@
 import random
 import numpy as np
 import matplotlib.mlab as mlab
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 #NEW STATS LISTS
 deck1Stats = []
 deck2Stats = []
+numTurns = []
 #create deck variables
 masterDeck = []
 deck1 = []
@@ -35,6 +37,7 @@ def main():
 	deal()
 	recursive_play(1)
 	winner()
+	plotThisShit()
 	
 def fillMasterDeck(numCards):
 	#Jack = 11
@@ -67,6 +70,7 @@ def recursive_play(turn_counter):
 	deck2Len = len(deck2)
 	deck1Stats.append(deck1Len)
 	deck2Stats.append(deck2Len)
+	numTurns.append(turn_counter)
 	print "--------------------------"
 	if(len(deck1) == 0 or len(deck2) == 0):
 		pass;
@@ -107,7 +111,7 @@ def war(card1, card2):
 			card1Win = battle(card1, card2, True)
 		elif(card1 == card2):
 			war(card1, card2)
-	warSpoils(card1Win)
+		warSpoils(card1Win)
 
 def battle(card1, card2, isWar):
 	if(card1 > card2):
@@ -161,6 +165,17 @@ def warSpoils(deck1win):
 	print "Player 1 has %i cards" % len(deck1)
 	print "Player 2 has %i cards" % len(deck2)
 
-
+def plotThisShit():
+	plt.xkcd()
+	plt.plot(numTurns, deck1Stats, color="r")
+	plt.plot(numTurns, deck2Stats, color="b")
+	plot_title = "Amount of cards in each deck in a simulated game of war over %i turns" % numTurns[len(numTurns)-1]
+	plt.title(plot_title)
+	plt.xlabel("Turn Number")
+	plt.ylabel("Amount of Cards in Deck")
+	red_patch = mpatches.Patch(color='red', label='Player 1')
+	blue_patch = mpatches.Patch(color='blue', label="Player 2")
+	plt.legend(handles=[red_patch, blue_patch])
+	plt.show()
 
 if __name__ == "__main__": main()

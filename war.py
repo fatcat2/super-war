@@ -1,5 +1,6 @@
 #ilovetacos
 #by @fatcat2
+#Python 2.7
 import random
 
 #create deck variables
@@ -21,24 +22,19 @@ def main():
 	#initialize master Deck
 	#use try-except to make sure there are less than 53 cards in play
 	try:
-		numCards = int(input("How many cards would you like to play with?\n"))
+		numCards = int(raw_input("How many cards would you like to play with?\n"))
 		print("------------------------")
 		fillMasterDeck(numCards)
 	except IndexError:
 		print("Please enter a number under 53")
 
 	deal()
-	recursive_play(1)
+	play(1)
 	winner()
 	
 def fillMasterDeck(numCards):
-	#Jack = 11
-	#Queen = 12
-	#King = 13
-	#Ace = 14
 	#Thanks to /u/SmartAsFart for these optimizations!
-	print(numCards)
-	input("Press enter to continue")
+	raw_input("Press enter to continue")
 	pool = [x for x in range(2, 15)]*4
 	global masterDeck
 	for x in range(0, numCards):
@@ -58,7 +54,7 @@ def deal():
 			deck2.append(popCard);
 			turndicator = not turndicator
 
-def recursive_play(turn_counter):
+def play(turn_counter):
 	print("--------------------------")
 	if(len(deck1) == 0 or len(deck2) == 0):
 		pass;
@@ -76,8 +72,8 @@ def recursive_play(turn_counter):
 			war(card1, card2)
 		turn_counter += 1
 		print("\n")
-		# raw_input("press enter to proceed")
-		recursive_play(turn_counter)
+		raw_input("press enter to proceed")
+		play(turn_counter)
 
 def war(card1, card2):
 	warSpoilsList.extend([card1, card2])
@@ -103,7 +99,6 @@ def war(card1, card2):
 			card1Win = battle(card1, card2, True)
 		elif(card1 == card2):
 			war(card1, card2)
-	warSpoils(card1Win, emptyOtherDeck)
 
 def battle(card1, card2, isWar):
 	if(card1 > card2):
@@ -114,6 +109,8 @@ def battle(card1, card2, isWar):
 		if(not isWar):
 			print("Player 1 has %i cards" % len(deck1))
 			print("Player 2 has %i cards" % len(deck2))
+		else:
+			warSpoils(True)
 		return True
 	elif(card1 < card2):
 		deck2.append(card1)
@@ -123,6 +120,8 @@ def battle(card1, card2, isWar):
 		if(not isWar):
 			print("Player 1 has %i cards" % len(deck1))
 			print("Player 2 has %i cards" % len(deck2))
+		else:
+			warSpoils(False)
 		return False
 
 def winner():
@@ -139,43 +138,23 @@ def printDrawnCard(playerName, card):
 	else:
 		print( "%s drew a %i" % (playerName, card))
 
-def warSpoils(deck1win, emptyOtherDeck):
+def warSpoils(deck1win):
 	if(deck1win):
 		print( "Player 1 wins the war")
-		if(not emptyOtherDeck):
+		if(len(deck2) != 0):
 			warSpoilsList.append(deck2.pop(0))
 		deck1.extend(warSpoilsList)
-	elif(not deck1win):
+	elif(len(deck1) != 0):
 		print( "Player 2 wins the war")
 		if(not emptyOtherDeck):
 			warSpoilsList.append(deck1.pop(0))
 		deck2.extend(warSpoilsList)
-	print( "Winner of war gets:")
+	print("Spoils of War:")
 	print(warSpoilsList)
 	del warSpoilsList[:]
-	print( "Player 1 has %i cards" % len(deck1))
-	print( "Player 2 has %i cards" % len(deck2))
+	print("Player 1 has %i cards" % len(deck1))
+	print("Player 2 has %i cards" % len(deck2))
 
 
 
 if __name__ == "__main__": main()
-
-###GARBARGE PILE###
-# def play():
-# 	turn_counter = 0
-# 	while(len(deck1) > 0 and len(deck2) > 0):
-# 		turn_counter += 1
-# 		print "Turn %i" % turn_counter
-# 		print "Player 1 has %i cards" % len(deck1)
-# 		print "Player 2 has %i cards" % len(deck2)
-# 		card1 = deck1.pop(0)
-# 		printDrawnCard("Player 1", card1)
-# 		card2 = deck2.pop(0)
-# 		printDrawnCard("Player 2", card2)
-# 		if(card1 > card2 or card2 > card1):
-# 			battle(card1, card2, False)
-# 		elif(card1 == card2):
-
-# 			war()
-
-# 		next_turn = raw_input("Press Enter to proceed\n")

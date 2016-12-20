@@ -54,10 +54,6 @@ def main():
 	print("All done!")
 	
 def fillMasterDeck(numCards):
-	#Jack = 11
-	#Queen = 12
-	#King = 13
-	#Ace = 14
 	#Thanks to /u/SmartAsFart for these optimizations!
 	pool = [x for x in range(2, 15)]*4
 	global masterDeck

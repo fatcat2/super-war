@@ -1,6 +1,7 @@
 #ilovetacos
 #by @fatcat2
-#python3.5
+#python2.7
+
 import random
 import numpy as np
 import matplotlib.mlab as mlab
@@ -84,6 +85,7 @@ def deal():
 		else:
 			deck2.append(popCard);
 			turndicator = not turndicator
+
 def recursive_play(turn_counter):
 	numTurns.append(turn_counter)
 	deck1Hand.append(len(deck1))

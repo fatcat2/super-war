@@ -98,7 +98,7 @@ def war(card1, card2):
 			card1Win = battle(card1, card2, True)
 		elif(card1 == card2):
 			war(card1, card2)
-	warSpoils(card1Win)
+		warSpoils(card1Win)
 
 def battle(card1, card2, isWar):
 	if(card1 > card2):

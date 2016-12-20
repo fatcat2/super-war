@@ -135,9 +135,6 @@ def winner():
 	else:
 		print 'Player 1 Wins!!!'
 
-def draw():
-	return deck.pop(0)
-
 def printDrawnCard(playerName, card):
 	if(card > 10):
 		print "%s drew a %s" % (playerName, faceCardDict[card])

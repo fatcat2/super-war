@@ -21,7 +21,7 @@ def main():
 	#initialize master Deck
 	#use try-except to make sure there are less than 53 cards in play
 	try:
-		numCards = input("How many cards would you like to play with?\n")
+		numCards = int(input("How many cards would you like to play with?\n"))
 		print("------------------------")
 		fillMasterDeck(numCards)
 	except IndexError:
@@ -36,14 +36,15 @@ def fillMasterDeck(numCards):
 	#Queen = 12
 	#King = 13
 	#Ace = 14
-	pool = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,13,13,13,13,14,14,14,14]
-	# print("yes")
+	#Thanks to /u/SmartAsFart for these optimizations!
+	print(numCards)
+	input("Press enter to continue")
+	pool = [x for x in range(2, 15)]*4
+	global masterDeck
 	for x in range(0, numCards):
-		poolsize = len(pool)
-		masterDeck.append(pool.pop(random.randint(0, poolsize-1)))
-		# raw_input("Hello ladies. Press enter to proceed")
+		masterDeck += [pool.pop(random.randrange(0, len(pool))) for i in range(numCards)]
 	print("Master Deck Cards:")
-	print masterDeck
+	print(masterDeck)
 
 def deal():
 	turndicator = True
@@ -58,13 +59,13 @@ def deal():
 			turndicator = not turndicator
 
 def recursive_play(turn_counter):
-	print "--------------------------"
+	print("--------------------------")
 	if(len(deck1) == 0 or len(deck2) == 0):
 		pass;
 	else:
-		print "Turn %i" % turn_counter
-		print "Player 1 has %i cards" % len(deck1)
-		print "Player 2 has %i cards" % len(deck2)
+		print( "Turn %i" % turn_counter)
+		print( "Player 1 has %i cards" % len(deck1))
+		print( "Player 2 has %i cards" % len(deck2))
 		card1 = deck1.pop(0)
 		printDrawnCard("Player 1", card1)
 		card2 = deck2.pop(0)
@@ -80,16 +81,20 @@ def recursive_play(turn_counter):
 
 def war(card1, card2):
 	warSpoilsList.extend([card1, card2])
+	print("WAR!")
 	card1Win = True
+	emptyOtherDeck = False
 	if(len(deck1) == 0 or len(deck2) == 0):
+		emptyOtherDeck = True
 		if(len(deck1) == 0):
-			print "Player 1 has no cards left"
+			print("Player 1 has no cards left")
+			card1Win = False
 			pass
 		elif(len(deck2) == 0):
-			print "Player 2 has no cards left"
+			print("Player 2 has no cards left")
+			card1Win = True
 			pass
 	else:
-		print "WAR!"
 		card1 = deck1.pop(0)
 		printDrawnCard("Player 1", card1)
 		card2 = deck2.pop(0)
@@ -98,59 +103,58 @@ def war(card1, card2):
 			card1Win = battle(card1, card2, True)
 		elif(card1 == card2):
 			war(card1, card2)
-		warSpoils(card1Win)
+	warSpoils(card1Win, emptyOtherDeck)
 
 def battle(card1, card2, isWar):
 	if(card1 > card2):
 		deck1.append(card1)
 		deck1.append(card2)
-		print "Player 1 gained a %i and a %i" % (card1, card2)
-		print ""
+		print("Player 1 gained a %i and a %i" % (card1, card2))
+		print("")
 		if(not isWar):
-			print "Player 1 has %i cards" % len(deck1)
-			print "Player 2 has %i cards" % len(deck2)
+			print("Player 1 has %i cards" % len(deck1))
+			print("Player 2 has %i cards" % len(deck2))
 		return True
 	elif(card1 < card2):
 		deck2.append(card1)
 		deck2.append(card2)
-		print "Player 2 gained a %i and a %i" % (card1, card2)
-		print ""
+		print("Player 2 gained a %i and a %i" % (card1, card2))
+		print("")
 		if(not isWar):
-			print "Player 1 has %i cards" % len(deck1)
-			print "Player 2 has %i cards" % len(deck2)
+			print("Player 1 has %i cards" % len(deck1))
+			print("Player 2 has %i cards" % len(deck2))
 		return False
 
 def winner():
-	print "Player 1 has %i cards" % len(deck1)
-	print "Player 2 has %i cards" % len(deck2)
+	print( "Player 1 has %i cards" % len(deck1))
+	print( "Player 2 has %i cards" % len(deck2))
 	if(len(deck1) == 0):
-		print "Player 2 Wins!!!"
+		print( "Player 2 Wins!!!")
 	else:
-		print 'Player 1 Wins!!!'
-
-def draw():
-	return deck.pop(0)
+		print( 'Player 1 Wins!!!')
 
 def printDrawnCard(playerName, card):
 	if(card > 10):
-		print "%s drew a %s" % (playerName, faceCardDict[card])
+		print( "%s drew a %s" % (playerName, faceCardDict[card]))
 	else:
-		print "%s drew a %i" % (playerName, card)
+		print( "%s drew a %i" % (playerName, card))
 
-def warSpoils(deck1win):
+def warSpoils(deck1win, emptyOtherDeck):
 	if(deck1win):
-		print "Player 1 wins the war"
-		warSpoilsList.append(deck2.pop(0))
+		print( "Player 1 wins the war")
+		if(not emptyOtherDeck):
+			warSpoilsList.append(deck2.pop(0))
 		deck1.extend(warSpoilsList)
 	elif(not deck1win):
-		print "Player 2 wins the war"
-		warSpoilsList.append(deck1.pop(0))
+		print( "Player 2 wins the war")
+		if(not emptyOtherDeck):
+			warSpoilsList.append(deck1.pop(0))
 		deck2.extend(warSpoilsList)
-	print "Winner of war gets:"
-	print warSpoilsList
+	print( "Winner of war gets:")
+	print(warSpoilsList)
 	del warSpoilsList[:]
-	print "Player 1 has %i cards" % len(deck1)
-	print "Player 2 has %i cards" % len(deck2)
+	print( "Player 1 has %i cards" % len(deck1))
+	print( "Player 2 has %i cards" % len(deck2))
 
 
 

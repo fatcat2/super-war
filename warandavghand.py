@@ -6,25 +6,21 @@ import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
+
 bigListDeck1 = []
 bigListDeck2 = []
 bigListNumTurns = []
 avgDeck1 = []
 avgDeck2 = []
-testNumTurns = 50
-#create deck variables
-deck1_master = []
-deck2_master = []
 masterDeck = []
 masterDeck_master = []
 deck1 = []
 deck2 = []
 warSpoilsList = []
-#################
 deck1Hand = []
 deck2Hand = []
 numTurns = []
-#initialize face card dictionaries
+testNumTurns = 50
 faceCardDict = {
 	11 : "J",
 	12 : "Q",
@@ -32,7 +28,6 @@ faceCardDict = {
 	14 : "A"
 }
 
-#METHODS
 def main():
 	global deck1Hand
 	global bigListDeck1
@@ -46,7 +41,6 @@ def main():
 		print("------------------------")
 	except IndexError:
 		print("Please enter a number under 53")
-	# excelStats()
 	while(len(bigListNumTurns) <= 10):
 		sadaf = int(len(bigListNumTurns))*10
 		print("Data Collection Process: %i%%" % sadaf)
@@ -63,9 +57,6 @@ def main():
 		del deck1Hand[:]
 		del deck2Hand[:]
 		del numTurns[:]
-	# print(bigListDeck1)
-	# print(bigListDeck2)
-	# print(bigListNumTurns)
 	raw_input("Data collection complete.\nPress enter to inititate data analysis.")
 	lotsOfStats(testNumTurns)
 	plotThisShit(testNumTurns)
@@ -81,8 +72,6 @@ def fillMasterDeck(numCards):
 	global masterDeck
 	for x in range(0, numCards):
 		masterDeck += [pool.pop(random.randrange(0, len(pool))) for i in range(numCards)]
-	# print("Master Deck Cards:")
-	# print(masterDeck)
 
 def deal():
 	turndicator = True
@@ -97,19 +86,13 @@ def deal():
 			turndicator = not turndicator
 def recursive_play(turn_counter):
 	numTurns.append(turn_counter)
-	# print("--------------------------")
 	deck1Hand.append(len(deck1))
 	deck2Hand.append(len(deck2))
 	if(len(deck1) == 0 or len(deck2) == 0):
 		pass;
 	else:
-		# print( "Turn %i" % turn_counter)
-		# print( "Player 1 has %i cards" % len(deck1))
-		# print( "Player 2 has %i cards" % len(deck2))
 		card1 = deck1.pop(0)
-		printDrawnCard("Player 1", card1)
 		card2 = deck2.pop(0)
-		printDrawnCard("Player 2", card2)
 		if(card1 > card2 or card2 > card1):
 			battle(card1, card2, False)
 		elif(card1 == card2):
@@ -148,9 +131,6 @@ def battle(card1, card2, isWar):
 		deck2.append(card2)
 		return False
 
-def printDrawnCard(playerName, card):
-	pass
-
 def warSpoils(deck1win, emptyOtherDeck):
 	if(deck1win):
 		if(not emptyOtherDeck and len(deck2) != 0):
@@ -187,8 +167,6 @@ def lotsOfStats(testNumTurns):
 		avg = avg/10.0
 		avgDeck2.append(avg)
 
-
-
 def plotThisShit(testNumTurns):
 	plt.xkcd()
 	plt.plot(range(0, testNumTurns), avgDeck1, color="r")
@@ -201,4 +179,5 @@ def plotThisShit(testNumTurns):
 	blue_patch = mpatches.Patch(color='blue', label="Player 2")
 	plt.legend(handles=[red_patch, blue_patch])
 	plt.show()
+
 if __name__ == "__main__": main()

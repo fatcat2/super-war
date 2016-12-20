@@ -1,7 +1,12 @@
 #ilovetacos
 #by @fatcat2
 import random
-
+import numpy as np
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+#NEW STATS LISTS
+deck1Stats = []
+deck2Stats = []
 #create deck variables
 masterDeck = []
 deck1 = []
@@ -58,6 +63,10 @@ def deal():
 			turndicator = not turndicator
 
 def recursive_play(turn_counter):
+	deck1Len = len(deck1)
+	deck2Len = len(deck2)
+	deck1Stats.append(deck1Len)
+	deck2Stats.append(deck2Len)
 	print "--------------------------"
 	if(len(deck1) == 0 or len(deck2) == 0):
 		pass;
@@ -155,23 +164,3 @@ def warSpoils(deck1win):
 
 
 if __name__ == "__main__": main()
-
-###GARBARGE PILE###
-# def play():
-# 	turn_counter = 0
-# 	while(len(deck1) > 0 and len(deck2) > 0):
-# 		turn_counter += 1
-# 		print "Turn %i" % turn_counter
-# 		print "Player 1 has %i cards" % len(deck1)
-# 		print "Player 2 has %i cards" % len(deck2)
-# 		card1 = deck1.pop(0)
-# 		printDrawnCard("Player 1", card1)
-# 		card2 = deck2.pop(0)
-# 		printDrawnCard("Player 2", card2)
-# 		if(card1 > card2 or card2 > card1):
-# 			battle(card1, card2, False)
-# 		elif(card1 == card2):
-
-# 			war()
-
-# 		next_turn = raw_input("Press Enter to proceed\n")

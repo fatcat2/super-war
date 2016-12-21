@@ -1,14 +1,8 @@
 #ilovetacos
 #by @fatcat2
+#Python 2.7
 import random
-import numpy as np
-import matplotlib.mlab as mlab
-import matplotlib.patches as mpatches
-import matplotlib.pyplot as plt
-#NEW STATS LISTS
-deck1Stats = []
-deck2Stats = []
-numTurns = []
+
 #create deck variables
 masterDeck = []
 deck1 = []
@@ -18,6 +12,7 @@ deck1sum = 0
 deck2sum = 0
 winnerInt = 0
 initialDeckDiff = 0
+
 #initialize face card dictionaries
 faceCardDict = {
 	11 : "J",
@@ -31,13 +26,13 @@ def main():
 	#initialize master Deck
 	#use try-except to make sure there are less than 53 cards in play
 	try:
-		numCards = input("How many cards would you like to play with?\n")
+		numCards = int(raw_input("How many cards would you like to play with?\n"))
 		print("------------------------")
 		fillMasterDeck(numCards)
 	except IndexError:
 		print("Please enter a number under 53")
+
 	deal()
-	print("COLLECTING DATA")
 	play(1)
 	winner()
 	print("Deck 1 Initial Sum: %i" % deck1sum)
@@ -51,13 +46,16 @@ def main():
 		print("It's equal - shit gonna go down!!!")
 	raw_input("DATA COLLECTION COMPLETE\nPRESS ENTER TO INITIATE DATA ANALYSIS")
 	print("Deck %i won" % winnerInt)
-	plotThisShit()
 	
 def fillMasterDeck(numCards):
 	#Thanks to /u/SmartAsFart for these optimizations!
-	global masterDeck
+	raw_input("Press enter to continue")
 	pool = [x for x in range(2, 15)]*4
-	masterDeck += [pool.pop(random.randrange(0, len(pool))) for i in range(numCards)]
+	print(pool)
+	global masterDeck
+	masterDeck += [pool.pop(random.randrange(0, len(pool))) for i in range(0, numCards)]
+	print("Master Deck Cards:")
+	print(masterDeck)
 
 def deal():
 	turndicator = True
@@ -76,33 +74,41 @@ def deal():
 	deck2sum = sum(deck2)
 
 def play(turn_counter):
-	if(turn_counter%10 == 0):
-		random.shuffle(deck1)
-		random.shuffle(deck2)
-	deck1Len = len(deck1)
-	deck2Len = len(deck2)
-	deck1Stats.append(deck1Len)
-	deck2Stats.append(deck2Len)
-	numTurns.append(turn_counter)
+	print("--------------------------")
 	if(len(deck1) == 0 or len(deck2) == 0):
 		pass;
 	else:
+		print( "Turn %i" % turn_counter)
+		print( "Player 1 has %i cards" % len(deck1))
+		print( "Player 2 has %i cards" % len(deck2))
 		card1 = deck1.pop(0)
+		printDrawnCard("Player 1", card1)
 		card2 = deck2.pop(0)
+		printDrawnCard("Player 2", card2)
 		if(card1 > card2 or card2 > card1):
 			battle(card1, card2, False)
 		elif(card1 == card2):
 			war(card1, card2)
 		turn_counter += 1
+		print("\n")
+		raw_input("press enter to proceed")
 		play(turn_counter)
 
 def war(card1, card2):
 	warSpoilsList.extend([card1, card2])
+	print("WAR!")
 	if(len(deck1) == 0 or len(deck2) == 0):
-		pass
+		if(len(deck1) == 0):
+			print("Player 1 has no cards left")
+			pass
+		elif(len(deck2) == 0):
+			print("Player 2 has no cards left")
+			pass
 	else:
 		card1 = deck1.pop(0)
+		printDrawnCard("Player 1", card1)
 		card2 = deck2.pop(0)
+		printDrawnCard("Player 2", card2)
 		if(card1 > card2 or card2 > card1):
 			battle(card1, card2, True)
 		elif(card1 == card2):
@@ -112,15 +118,21 @@ def battle(card1, card2, isWar):
 	if(card1 > card2):
 		deck1.append(card1)
 		deck1.append(card2)
+		print("Player 1 gained a %i and a %i" % (card1, card2))
+		print("")
 		if(not isWar):
-			pass
+			print("Player 1 has %i cards" % len(deck1))
+			print("Player 2 has %i cards" % len(deck2))
 		else:
 			warSpoils(True)
 	elif(card1 < card2):
 		deck2.append(card1)
 		deck2.append(card2)
+		print("Player 2 gained a %i and a %i" % (card1, card2))
+		print("")
 		if(not isWar):
-			pass
+			print("Player 1 has %i cards" % len(deck1))
+			print("Player 2 has %i cards" % len(deck2))
 		else:
 			warSpoils(False)
 
@@ -133,26 +145,29 @@ def winner():
 		print('Player 1 Wins!!!')
 		winnerInt = 1
 
+def printDrawnCard(playerName, card):
+	if(card > 10):
+		print( "%s drew a %s" % (playerName, faceCardDict[card]))
+	else:
+		print( "%s drew a %i" % (playerName, card))
+
 def warSpoils(deck1win):
 	if(deck1win):
-		warSpoilsList.append(deck2.pop(0))
+		print( "Player 1 wins the war")
+		if(len(deck2) != 0):
+			warSpoilsList.append(deck2.pop(0))
 		deck1.extend(warSpoilsList)
-	elif(not deck1win):
-		warSpoilsList.append(deck1.pop(0))
+	else:
+		print( "Player 2 wins the war")
+		if(len(deck1) != 0):
+			warSpoilsList.append(deck1.pop(0))
 		deck2.extend(warSpoilsList)
+	print("Spoils of War:")
+	print(warSpoilsList)
 	del warSpoilsList[:]
+	print("Player 1 has %i cards" % len(deck1))
+	print("Player 2 has %i cards" % len(deck2))
 
-def plotThisShit():
-	plt.xkcd()
-	plt.plot(numTurns, deck1Stats, color="r")
-	plt.plot(numTurns, deck2Stats, color="b")
-	plot_title = "Amount of cards in each deck in a simulated game of war over %i turns" % numTurns[len(numTurns)-1]
-	plt.title(plot_title)
-	plt.xlabel("Turn Number")
-	plt.ylabel("Amount of Cards in Deck")
-	red_patch = mpatches.Patch(color='red', label='Player 1')
-	blue_patch = mpatches.Patch(color='blue', label="Player 2")
-	plt.legend(handles=[red_patch, blue_patch])
-	plt.show()
+
 
 if __name__ == "__main__": main()

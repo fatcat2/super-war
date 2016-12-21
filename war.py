@@ -21,13 +21,7 @@ faceCardDict = {
 def main():
 	#initialize master Deck
 	#use try-except to make sure there are less than 53 cards in play
-	try:
-		numCards = int(raw_input("How many cards would you like to play with?\n"))
-		print("------------------------")
-		fillMasterDeck(numCards)
-	except IndexError:
-		print("Please enter a number under 53")
-
+	fillMasterDeck(int(raw_input("How many cards would you like to play with?\n")))
 	deal()
 	play(1)
 	winner()
@@ -101,21 +95,21 @@ def battle(card1, card2, isWar):
 		deck1.append(card2)
 		print("Player 1 gained a %i and a %i" % (card1, card2))
 		print("")
-		if(not isWar):
+		if(isWar):
+			warSpoils(True)
+		else:
 			print("Player 1 has %i cards" % len(deck1))
 			print("Player 2 has %i cards" % len(deck2))
-		else:
-			warSpoils(True)
 	elif(card1 < card2):
 		deck2.append(card1)
 		deck2.append(card2)
 		print("Player 2 gained a %i and a %i" % (card1, card2))
 		print("")
-		if(not isWar):
+		if(isWar):
+			warSpoils(False)
+		else:
 			print("Player 1 has %i cards" % len(deck1))
 			print("Player 2 has %i cards" % len(deck2))
-		else:
-			warSpoils(False)
 
 def winner():
 	print( "Player 1 has %i cards" % len(deck1))

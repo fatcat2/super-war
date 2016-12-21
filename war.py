@@ -36,9 +36,9 @@ def fillMasterDeck(numCards):
 	#Thanks to /u/SmartAsFart for these optimizations!
 	raw_input("Press enter to continue")
 	pool = [x for x in range(2, 15)]*4
+	print(pool)
 	global masterDeck
-	for x in range(0, numCards):
-		masterDeck += [pool.pop(random.randrange(0, len(pool))) for i in range(numCards)]
+	masterDeck += [pool.pop(random.randrange(0, len(pool))) for i in range(0, numCards)]
 	print("Master Deck Cards:")
 	print(masterDeck)
 

@@ -59,6 +59,9 @@ def deal():
 			turndicator = not turndicator
 
 def play(turn_counter):
+	if(turn_counter%10 == 0):
+		random.shuffle(deck1)
+		random.shuffle(deck2)
 	deck1Len = len(deck1)
 	deck2Len = len(deck2)
 	deck1Stats.append(deck1Len)
